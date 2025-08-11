@@ -13,17 +13,42 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
-  const handleCheckIn = async () => {
-    setMessage('出勤しました！');
-    setCheckedIn(true);
-    // 後でAPIと接続
-  };
-
-  const handleCheckOut = async () => {
-    setMessage('退勤しました！');
-    setCheckedIn(false);
-    // 後でAPIと接続
-  };
+const handleCheckIn = async () => {
+  try {
+    const response = await fetch('/api/CheckIn', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      setMessage('出勤打刻完了！');
+      setCheckedIn(true);
+    } else {
+      setMessage('エラーが発生しました');
+    }
+  } catch (error) {
+    setMessage('接続エラーが発生しました');
+  }
+};
+const handleCheckOut = async () => {
+  try {
+    const response = await fetch('/api/CheckOut', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      setMessage(`退勤打刻完了！勤務時間: ${data.workHours}時間`);
+      setCheckedIn(false);
+    } else {
+      setMessage('エラーが発生しました');
+    }
+  } catch (error) {
+    setMessage('接続エラーが発生しました');
+  }
+};
 
   return (
     <div className="App">
