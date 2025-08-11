@@ -21,10 +21,10 @@ const handleCheckIn = async () => {
     });
     
     if (response.ok) {
-      const data = await response.json();
-      setMessage('出勤打刻完了！');
-      setCheckedIn(true);
-    } else {
+  await response.json();  // dataを削除
+  setMessage('出勤打刻完了！');
+  setCheckedIn(true);
+} else {
       setMessage('エラーが発生しました');
     }
   } catch (error) {
